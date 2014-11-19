@@ -1,0 +1,473 @@
+import ccm
+log=ccm.log()
+from ccm.lib.actr import *
+
+## The Environment
+class MyEnvironment(ccm.Model):
+   pass    ## Environment is empty
+
+class MyAgent(ACTR):
+    buffer_context=Buffer()
+    buffer_DM=Buffer()
+    buffer_planning_unit=Buffer()
+    buffer_unit_task=Buffer()
+    buffer_method=Buffer()
+    buffer_operator=Buffer()
+    DM=Memory(buffer_DM)
+
+    def init():
+        DM.add('planning_unit: cuelag:none cue:start unit_task:buy_command_post_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:assume_defensible_position_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:get_behind_cover_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:adjust_position_slightly_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:engage_enemy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:find_suitiable_place_to_engage_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:scan_for_enemies_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:focus_on_killing_hard_enemy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:select_target')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:create_distance_close_quarter_enemy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:engage_enemy_close_quarters_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:collect_free_ammo_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:collect_expensive_ammo_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:reload_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:return_to_base_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:repair_improvement_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:buy_improvement_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:wait_until_healthy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:scan_general_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:run_for_cover_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:locate_hard_enemy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:locate_far_enemy_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:get_new_gun_calm_environment_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:get_new_gun_chaotic_environment_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:run_and_scan_unit_task')
+        DM.add('planning_unit: cuelag:none cue:start unit_task:explore_unit_task')
+        DM.add('planning_unit:find_defensible_position_calm_environment_planning_unit cuelag:none cue:start unit_task:explore')
+        DM.add('planning_unit:find_defensible_position_calm_environment_planning_unit cuelag:none cue:start unit_task:assume_defensible_position')
+        DM.add('planning_unit:find_defensible_position_calm_environment_planning_unit cuelag:none cue:start unit_task:find_suitable_place_to_engage')
+        DM.add('planning_unit:find_defensible_position_calm_environment_planning_unit cuelag:none cue:start unit_task:get_behind_cover')
+        DM.add('planning_unit:find_defensible_position_calm_environment_planning_unit cuelag:none cue:start unit_task:scan_for_enemies')
+        DM.add('planning_unit:find_defensible_position_chaotic_environment_planning_unit cuelag:none cue:start unit_task:run_and_scan')
+        DM.add('planning_unit:find_defensible_position_chaotic_environment_planning_unit cuelag:none cue:start unit_task:assume_defensible_position')
+        DM.add('planning_unit:find_defensible_position_chaotic_environment_planning_unit cuelag:none cue:start unit_task:find_suitable_place_to_engage')
+        DM.add('planning_unit:find_defensible_position_chaotic_environment_planning_unit cuelag:none cue:start unit_task:get_behind_cover')
+        DM.add('planning_unit:find_defensible_position_chaotic_environment_planning_unit cuelag:none cue:start unit_task:scan_for_enemies')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:assume_defensible_position')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:engage_enemy')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:get_behind_cover')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:scan_for_enemies')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:adjust_position_slightly')
+        DM.add('planning_unit:defend_position_planning_unit cuelag:none cue:start unit_task:reload_strategic')
+        DM.add('planning_unit:start_of_game_preparations_planning_unit cuelag:none cue:start unit_task:explore')
+        DM.add('planning_unit:start_of_game_preparations_planning_unit cuelag:none cue:start unit_task:buy_command_post')
+        DM.add('planning_unit:start_of_game_preparations_planning_unit cuelag:none cue:start unit_task:assume_defensible_position')
+        DM.add('planning_unit:between_rounds_preparations_planning_unit cuelag:none cue:start unit_task:collect_free_ammo')
+        DM.add('planning_unit:between_rounds_preparations_planning_unit cuelag:none cue:start unit_task:collect_expensive_ammo')
+        DM.add('planning_unit:between_rounds_preparations_planning_unit cuelag:none cue:start unit_task:get_new_gun_calm_environment')
+        DM.add('planning_unit:between_rounds_preparations_planning_unit cuelag:none cue:start unit_task:return_to_base')
+        DM.add('planning_unit:between_rounds_preparations_planning_unit cuelag:none cue:start unit_task:assume_defensible_position')
+        DM.add('planning_unit:hunt_planning_unit cuelag:none cue:start unit_task:locate_far_enemy')
+        DM.add('planning_unit:hunt_planning_unit cuelag:none cue:start unit_task:engage_enemy')
+        DM.add('planning_unit:recover_health_planning_unit cuelag:none cue:start unit_task:get_behind_cover')
+        DM.add('planning_unit:recover_health_planning_unit cuelag:none cue:start unit_task:wait_until_healthy')
+        DM.add('planning_unit:replenish_supplies_chaotic_planning_unit cuelag:none cue:start unit_task:collect_expensive_ammo')
+        DM.add('planning_unit:replenish_supplies_chaotic_planning_unit cuelag:none cue:start unit_task:collect_free_ammo')
+        DM.add('planning_unit:replenish_supplies_chaotic_planning_unit cuelag:none cue:start unit_task:run_and_scan')
+        DM.add('planning_unit:replenish_supplies_chaotic_planning_unit cuelag:none cue:start unit_task:get_new_gun_chaotic_environment')
+        DM.add('planning_unit:find_and_kill_hard_enemy cuelag:none cue:start unit_task:locate_hard_enemy')
+        DM.add('planning_unit:find_and_kill_hard_enemy cuelag:none cue:start unit_task:engage_enemy')
+
+
+##Initial Model Behaviours
+        pass    ## No initial model behaviours
+    
+## Planning Units
+
+    def avoid_hard_enemy_planning_unit(## This tends to show up when you are roaming around and not defending a particular spot,
+## I'm not sure if this is different from the run away planning unit, or if this is just a part of the behaviours,
+## this could also be part of the be aggressive planning unit,
+):
+        ## Basically, you try to create a lot of distance between you and the hard enemy (e.g. machine gunner)
+        ## While doing this, you pick off smaller enemies as they come up
+
+    def find_defensible_position_calm_environment_planning_unit(buffer_context = environment:between_rounds,
+buffer_context = agent:not_in_defensible_position,
+):
+        ## Scan/look for cover / defensible place
+        ## Get to defensible position
+
+    def find_defensible_position_chaotic_environment_planning_unit(buffer_context = environment:chaotic,
+buffer_context = agent:being_mobbed,
+buffer_context = agent:caught_in_crossfire # an 'or' condition,
+):
+        # Scan/look for easy cover
+        # Run/roll to cover
+        # Assume defensive stance
+
+    def start_of_game_preparations_planning_unit(buffer_context = environment:game_not_started,
+buffer_context = environment_object:command_post_not_bought,
+):
+        # Explore
+        # Buy Command post
+        # Assume defensible position
+
+    def between_rounds_preparations_planning_unit(buffer_context = environment:between_rounds,
+):
+        ## Collect ammo
+        ## Return to base 
+        ## Assume defensible position
+        ## This is an ordered planning unit
+
+    def find_and_kill_hard_enemy(buffer_context = enemy:hard_enemy,
+buffer_context = enemy:presence_known_by_agent,
+buffer_context = environment:manageable,
+):
+        ## Search for hard enemy
+        ## Focus on killing hard enemy
+
+    def hunt_planning_unit(buffer_context = environment:calm,
+buffer_context = enemy:alive,
+buffer_context = enemy:location_not_known,
+):
+        ## Explore (or locate far enemy)
+        ## Engage enemies as they come up
+
+    def defend_position_planning_unit(buffer_context = agent:in_defensible_position,
+buffer_context = environment:manageable,
+buffer_context = envirionment:enemies_coming,
+):
+        ## Get behind cover (optional)
+        ## Scan for enemies (iterative)
+        ## Engage enemies (iterative)
+        ## Reload strategic (iterative)
+        ## Adjust position slightly (iterative)
+
+    def recover_health_planning_unit(buffer_context = agent:health_low,
+):
+        ## Get behind cover
+        ## Wait until healthy
+
+    def replenish_supplies_chaotic_planning_unit(buffer_context = environment:chaotic,
+buffer_context = agent:needs_to_get_ammo,
+):
+        # Run and scan for ammo
+        # Collect weapons/ammo
+
+    def be_aggressive_planning_unit():
+        ## This planning unit covers the behaviour of roaming around and killing enemies as they come
+    
+## Unit Tasks
+
+    def buy_command_post_unit_task(buffer_context = agent: located_defensible_base_position,
+buffer_planning_unit = planning_unit: set_up_base,
+):
+        buffer_context = environment_object_base: bought
+
+    def assume_defensible_position_unit_task(buffer_context = agent: not_in_defensible_position,
+buffer_planning_unit = planning_unit: find_defensible_position_chaotic,
+buffer_planning_unit = planning_unit: find_defensible_position_calm,
+buffer_context = agent: defensible_position_located,
+):
+        buffer_context = agent: run_direction_defensible_position
+        buffer_context = agent: in_defensible_position ## if successful
+
+    def get_behind_cover_unit_task(buffer_context = agent: not_behind_cover,
+):
+        buffer_context = agent: behind_cover  ## if successful
+
+    def adjust_position_slightly_unit_task(buffer_context = enemies: presence_known,
+buffer_context = enemies: not_vulnerable,
+buffer_context = enemies: not_visible ## this should be an or,
+):
+        ## Part of scanning process? A method?
+        buffer_context = enemy: visible ## possible outcome
+        buffer_context = enemy: vulnerable ## possible outcome
+        buffer_context = agent: enemy_located ## possible outcome
+
+    def engage_enemy_unit_task(buffer_context = enemy: vulnerable ,
+buffer_context = enemy: target,
+buffer_context = agent: in_suitable_place_to_engage,
+):
+        buffer_context = agent: aim_at_target
+        buffer_context = agent: shoot_at_target
+        buffer_context = enemy: injured ## Possible outcome
+        buffer_context = enemy: killed ## Possible outcome
+
+    def find_suitiable_place_to_engage_unit_task(buffer_context = agent: not_in_suitable_place_to_engage,
+buffer_context = enemy: current_target  ,
+):
+        ## Manouever to place where enemy is vulnerable, but agent is not
+        buffer_context = engagement_position: located
+        buffer_context = engagement_position: taken
+
+    def scan_for_enemies_unit_task(buffer_context = agent: not_firing,
+):
+        buffer_context = enemy: located  ## If successful
+        buffer_context = agent: scanning
+
+    def focus_on_killing_hard_enemy_unit_task(buffer_context = enemy: hard,
+buffer_context = enemy: vulnerable,
+buffer_context = environment: not_mobbed,
+):
+        buffer_context = enemy: target
+        buffer_context = agent: aim
+        buffer_context = agent: fire
+        buffer_context = enemy: injured ## if successful
+        buffer_context = enemy: killed ## if successful
+
+    def select_target():
+        # enemy_x becomes a target according to some criteria
+
+    def create_distance_close_quarter_enemy_unit_task(buffer_context = enemy: distance_dangerously_close,
+buffer_context = environment: manageable,
+buffer_context = enemy: hard_to_kill_CQ #soft constraint?,
+):
+        buffer_context = agent: run_away_from_CQ_enemy
+
+    def engage_enemy_close_quarters_unit_task(buffer_context = enemy: target,
+buffer_context = enemy: easy_to_kill_close_quarters,
+buffer_context = enemy: not_within_close_quarters_range #optional constraint,
+):
+        buffer_context = agent: positioning_enemy_in_close_quarter_range # if not already in range
+        buffer_context = agent: whack_enemy_with_gun
+        buffer_context = enemy: injured # if successful
+        buffer_context = enemy: killed # if successful
+
+    def collect_free_ammo_unit_task(buffer_context = agent: stored_ammo_low,
+buffer_context = environment_object: ammo_accessible # agent not likely to die getting ammo,
+buffer_context = environment: manageable,
+buffer_context = agent_ammo_located,
+):
+        buffer_context = agent: run_towards_ammo
+        buffer_context = agent: ammo_medium # or high, depending on success
+
+    def collect_expensive_ammo_unit_task(buffer_context = agent: ammo_low,
+buffer_context = environment_object: free_ammo_not_available # possible reason,
+buffer_context = environment_object_free_ammo_not_accessible # another possible reason,
+buffer_context = environment: manageable,
+buffer_context = agent: ammo_located,
+):
+        buffer_context = agent: stored_ammo_medium # or high, if successful
+
+    def reload_unit_task(buffer_context = agent: gun_low_ammo,
+buffer_context = agent: ammo_medium # or high, not out,
+buffer_context = environment: manageable,
+):
+        buffer_context = agent: gun_high_ammo
+
+    def return_to_base_unit_task(buffer_context = agent: not_at_base,
+):
+        buffer_context = agent_run_direction_base
+        buffer_context = agent_in_base # if successful
+
+    def repair_improvement_unit_task(buffer_context = environment_object: improvement_damaged,
+buffer_context = agent: can_afford_improvement,
+buffer_context = environment_object: target,
+buffer_context = environment: between_levels,
+):
+        buffer_context = environment_object: improvement_full_health
+        buffer_context = agent: money_less
+
+    def buy_improvement_unit_task(buffer_context = environment: between_rounds,
+buffer_context = environment_object: target ## according to some constraint,
+buffer_context = agent: can_afford_improvement,
+buffer_context = environment_object: improvement_not_bought,
+):
+        buffer_context = environment_object: improvement_bought
+        buffer_context = agent: less_money
+
+    def wait_until_healthy_unit_task(buffer_context = agent: health_critical,
+buffer_context = agent: safe_behind_cover,
+):
+        buffer_context = agent: wait_behind_cover
+        buffer_context = agent: health_medium # or high, if successful
+
+    def scan_general_unit_task(# used in conjunction with other things, eg firing, running,
+# method?,
+):
+        # locate object, ammo, defensible position, etc
+
+    def run_for_cover_unit_task(buffer_context = environment_object: defensible_position_located,
+):
+        buffer_context = agent: run_direction_defensible_position
+        buffer_context = agent: in_defensible_position # if successful
+        # can be use in conjunction with scanning
+
+    def locate_hard_enemy_unit_task(buffer_context = enemy:hard_enemy_alive,
+buffer_context = enemy:agent_knows_presence ## e.g. hears hard enemy,
+buffer_context = enemy:agent_doesnt_know_location,
+):
+        buffer_context = agent:scan
+        ## I think this should be a planning unit that involves scanning, and moving
+        buffer_context = agent:move_direction_hard_enemy
+        buffer_context = enemy:located ## If successful
+
+    def locate_far_enemy_unit_task(buffer_context = environment:calm ## or manageable,
+buffer_context = enemy:alive,
+buffer_context = enemy:location_not_known_by_agent,
+buffer_context = enemy:proximity_far,
+):
+        buffer_context = agent:scan
+        buffer_context = agent:adjust_position # in the likely direction of the far enemy
+
+    def get_new_gun_calm_environment_unit_task(buffer_context = environment:manageable,
+buffer_context = agent:wants_new_gun ## criteria?,
+buffer_context = environment_object:gun_accessible,
+):
+        buffer_context = agent:move_direction_gun
+        buffer_context = agent:new_gun ## if successful
+
+    def get_new_gun_chaotic_environment_unit_task(buffer_context = environment:chaotic,
+buffer_context = agent:stored_ammo_low,
+buffer_context = environment_object:gun_located,
+buffer_context = environment_object:ammo_current_gun_not_available,
+):
+        buffer_context = agent:new_gun ## if successful
+        ## basically, this covers the case of a chaotic environment where ammo is low and the agent needs more
+
+    def run_and_scan_unit_task(## Used in a lot of planning units, usually ones involving finding cover, a safe place, or new ammo,
+## usually in chaotic environments where the agent has to move fast to avoid dying,
+):
+        ## Get out of the place you're currently in
+        ## Run towards the likely location of your goal (e.g. cover or ammo)
+        ## Get to the location of goal and do something (e.g. get behind cover or get new ammo)
+
+    def explore_unit_task(buffer_context = environment_calm,
+# This is a lot like the run_and_scan unit task, except for calm environments,
+# Basically, this comes out when the agent wants to locate ammo / guns / defensible positions,
+# ^ But there is no immediate pressure for the agent to fight enemies,
+):
+        ## Agent locates ammo, guns, defensible positions, or enemies
+        ## Agent runs around and scans
+
+    def explore():
+        pass    ## No behaviour specified for this Unit Task
+
+    def assume_defensible_position():
+        pass    ## No behaviour specified for this Unit Task
+
+    def find_suitable_place_to_engage():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_behind_cover():
+        pass    ## No behaviour specified for this Unit Task
+
+    def scan_for_enemies():
+        pass    ## No behaviour specified for this Unit Task
+
+    def run_and_scan():
+        pass    ## No behaviour specified for this Unit Task
+
+    def assume_defensible_position():
+        pass    ## No behaviour specified for this Unit Task
+
+    def find_suitable_place_to_engage():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_behind_cover():
+        pass    ## No behaviour specified for this Unit Task
+
+    def scan_for_enemies():
+        pass    ## No behaviour specified for this Unit Task
+
+    def assume_defensible_position():
+        pass    ## No behaviour specified for this Unit Task
+
+    def engage_enemy():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_behind_cover():
+        pass    ## No behaviour specified for this Unit Task
+
+    def scan_for_enemies():
+        pass    ## No behaviour specified for this Unit Task
+
+    def adjust_position_slightly():
+        pass    ## No behaviour specified for this Unit Task
+
+    def reload_strategic():
+        pass    ## No behaviour specified for this Unit Task
+
+    def explore():
+        pass    ## No behaviour specified for this Unit Task
+
+    def buy_command_post():
+        pass    ## No behaviour specified for this Unit Task
+
+    def assume_defensible_position():
+        pass    ## No behaviour specified for this Unit Task
+
+    def collect_free_ammo():
+        pass    ## No behaviour specified for this Unit Task
+
+    def collect_expensive_ammo():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_new_gun_calm_environment():
+        pass    ## No behaviour specified for this Unit Task
+
+    def return_to_base():
+        pass    ## No behaviour specified for this Unit Task
+
+    def assume_defensible_position():
+        pass    ## No behaviour specified for this Unit Task
+
+    def locate_far_enemy():
+        pass    ## No behaviour specified for this Unit Task
+
+    def engage_enemy():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_behind_cover():
+        pass    ## No behaviour specified for this Unit Task
+
+    def wait_until_healthy():
+        pass    ## No behaviour specified for this Unit Task
+
+    def collect_expensive_ammo():
+        pass    ## No behaviour specified for this Unit Task
+
+    def collect_free_ammo():
+        pass    ## No behaviour specified for this Unit Task
+
+    def run_and_scan():
+        pass    ## No behaviour specified for this Unit Task
+
+    def get_new_gun_chaotic_environment():
+        pass    ## No behaviour specified for this Unit Task
+
+    def locate_hard_enemy():
+        pass    ## No behaviour specified for this Unit Task
+
+    def engage_enemy():
+        pass    ## No behaviour specified for this Unit Task
+    
+## Methods
+    
+## Operators 
+
+    def scan(# used in conjunction with other things, eg firing, running,
+):
+        # locate object, ammo, defensible position, etc
+
+## Global productions for retrieving Unit Tasks from DM
+
+    def request_next_unit_task(b_plan_unit='planning_unit:?planning_unit cuelag:?cuelag cue:?cue unit_task:?unit_task state:running', b_unit_task='unit_task:?unit_task state:finished'):
+        DM.request('planning_unit:?planning_unit cue:?unit_task unit_task:? cuelag:?cue')
+        b_plan_unit.set('planning_unit:?planning_unit cuelag:?cuelag cue:?cue unit_task:?unit_task state:retrieve')
+
+    def retrieve_next_unit_task(b_plan_unit='state:retrieve', b_DM='planning_unit:?planning_unit cuelag:?cuelag cue:?cue!finished unit_task:?unit_task'):
+        b_plan_unit.set('planning_unit:?planning_unit cuelag:?cuelag cue:?cue unit_task:?unit_task state:running')
+        b_unit_task.set('unit_task:?unit_task state:start')
+
+    def last_unit_task(b_unit_task='unit_task:finished state:start', b_plan_unit='planning_unit:?planning_unit'):
+        b_unit_task.set('stop')
+
+## Code to run the model
+tim = MyAgent()
+env = MyEnvironment()
+env.agent = tim
+ccm.log_everything(env)
+
+env.run()
+ccm.finished()
