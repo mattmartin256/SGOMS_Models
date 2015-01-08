@@ -1,0 +1,162 @@
+Environmental-Perceptual Model v.7 - Based on SGOMS_Model v.7
+Created 2015.01.07
+
+===== Environment Variables =====
+
+buffer_context = environment:game_not_started
+buffer_context = environment:game_started
+
+buffer_context = environment:between_rounds
+buffer_context = environment:not_between_rounds # not used in the model
+
+buffer_context = environment:calm
+buffer_context = environment:manageable
+buffer_context = environment:chaotic
+
+buffer_context = environment:enemies_coming
+
+buffer_context = environment:explosive_dangerously_close
+
+buffer_context = environment:many_far-mid_enemies_present
+
+buffer_context = environment:many_close_quarter_enemies_not_present
+buffer_context = environment:many_close_quarter_enemies_present
+
+
+===== Environment Object Variables =====
+
+buffer_context = environment_object:command_post_not_bought
+buffer_context = environment_object:command_post_bought
+
+buffer_context = environment_object:free_ammo_accessible # agent not likely to die getting ammo
+buffer_context = environment_object:free_not_ammo_accessible
+
+buffer_context = environment_object:free_ammo_not_available # simply not present in environment
+buffer_context = environment_object:free_ammo_available
+
+buffer_context = environment_object:expensive_ammo_accessible # expensive ammo is always available
+
+buffer_context = environment_object:ammo_accessible # Either free or expensive ammo
+buffer_context = environment_object:ammo_not_accessible
+
+buffer_context = environment_object:engagement_position_located
+buffer_context = environment_object:engagement_position_taken
+
+
+===== Agent Variables =====
+
+*** Location ***
+
+buffer_context = agent:not_at_suitable_place_to_engage
+buffer_context = agent:at_suitable_place_to_engage
+
+buffer_context = agent:defensible_position_located
+
+buffer_context = agent:defensible_base_position_located
+
+buffer_context = agent:not_at_base
+buffer_context = agent:at_base
+
+buffer_context = agent:not_at_defensible_position
+buffer_context = agent:at_defensible_position
+
+buffer_context = agent:not_at_ideal_defensible_position
+
+
+*** Movement ***
+
+buffer_context = agent:run_direction_ammo
+buffer_context = agent:move_direction_ammo
+buffer_context = agent:run_direction_base
+
+buffer_context = agent:run_direction_toward_ammo
+buffer_context = agent:run_direction_toward_goal_location
+
+buffer_context = agent:move_direction_away_from_explosive
+
+buffer_context = agent:move_direction_toward_target_enemy
+
+buffer_context = agent:move_direction_away_from_CQ_enemy_short_distance
+
+buffer_context = agent:positioning_enemy_in_close_quarter_range
+
+buffer_context = agent:run_direction_toward_goal_location
+
+
+*** Actions ***
+
+buffer_context = agent:aim_at_target
+
+buffer_context = agent:shoot_at_target
+buffer_context = agent:not_firing
+
+buffer_context = agent:cq_engage_enemy_target
+
+buffer_context = agent:scanning
+
+buffer_context = agent:grab_ammo
+
+*** Status ***
+
+buffer_context = agent:not_behind_cover
+buffer_context = agent:behind_cover
+buffer_context = agent:safe_behind_cover
+
+buffer_context = agent:feels_aggressive
+
+buffer_context = agent:being_mobbed
+buffer_context = agent:caught_in_crossfire
+
+buffer_context = agent:health_low
+buffer_context = agent:health_high
+
+
+*** Ammo ***
+
+buffer_context = agent:stored_ammo_low	# need ammo
+buffer_context = agent:stored_ammo_medium # could get ammo, but no need
+buffer_context = agent:stored_ammo_high	# don't need ammo (basically full)
+
+buffer_context = agent:gun_ammo_low  # should reload
+buffer_context = agent:gun_ammo_high # don't need to reload
+
+buffer_context = agent:ammo_located
+
+
+*** Gun ***
+
+buffer_context = agent:current_gun_rifle
+buffer_context = agent:current_gun_shotgun
+
+buffer_context = agent:current_gun_not_appropriate
+buffer_context = agent:current_gun_appropriate
+
+
+===== Enemy variables =====
+
+buffer_context = enemy:alive	# The base state
+buffer_context = enemy:injured	# If enemy crawling around, i.e. critically injured
+buffer_context = enemy:dead	# Completely dead
+
+buffer_context = enemy:location_not_known
+buffer_context = enemy:located
+buffer_context = enemy:target
+
+buffer_context = enemy:presence_known
+
+buffer_context = enemy:vulnerable
+buffer_context = enemy:not_vulnerable
+
+buffer_context = enemy:visible
+buffer_context = enemy:not_visible 
+
+buffer_context = enemy:near_agent
+buffer_context = enemy:distance_dangerously_close
+
+buffer_context = enemy:not_within_close_quarters_range
+buffer_context = enemy:within_close_quarters_range
+
+buffer_context = enemy:not_suitiable_to_kill_close_quarters
+buffer_context = enemy:suitable_to_kill_close_quarters
+
+
