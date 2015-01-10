@@ -1,0 +1,114 @@
+Environmental-Perceptual Model v.7b - Based on SGOMS_Model v.7
+Created 2015.01.09
+
+Note on version 7b: 
+After attempting to annotate with version 7, it became clear that we need to have all of the variables
+in the context at the same time, and have a checklist-type approach where we change the variables as they context changes.
+We will include all possible states of the context, including states which are not used in the model.
+I will make clear which variables are not in the model by using the abbreviation NIM - Not In Model.
+
+The abbreviation NIM means that the variable is not used in the model - or Not In Model (NIM)
+
+
+===== Environment Variables =====
+
+buffer_context = environment:game_not_started / game_started
+buffer_context = environment:between_rounds / not_between_rounds #NIM
+buffer_context = environment:calm / manageable / chaotic
+buffer_context = environment:enemies_coming / enemies_not_coming #NIM
+buffer_context = environment:explosive_dangerously_close / explosive_not_dangerously_close #NIM
+buffer_context = environment:many_far-mid_enemies_present / many_far-mid_enemies_not_present #NIM
+buffer_context = environment:many_close_quarter_enemies_present / many_close_quarter_enemies_not_present
+
+
+===== Environment Object Variables =====
+
+buffer_context = environment_object:command_post_bought / command_post_not_bought
+buffer_context = environment_object:free_ammo_accessible / free_not_ammo_accessible  
+	# Agent likely to die getting ammo
+buffer_context = environment_object:free_ammo_available / free_ammo_not_available 
+	# Simply not present in environment
+buffer_context = environment_object:expensive_ammo_accessible / expensive_ammo_not_accessible #NIM
+	# Expensive ammo is always available 
+buffer_context = environment_object:ammo_accessible / ammo_not_accessible # Either free or expensive ammo
+buffer_context = environment_object:engagement_position_located / engagement_position_not_located #NIM
+buffer_context = environment_object:engagement_position_taken / engagement_position_not_taken #NIM
+
+
+===== Agent Variables =====
+
+*** Location ***
+
+buffer_context = agent:at_suitable_place_to_engage / not_at_suitable_place_to_engage
+buffer_context = agent:defensible_position_located / defensible_position_not_located #NIM
+buffer_context = agent:defensible_base_position_located / defensible_base_position_not_located #NIM
+buffer_context = agent:at_base / not_at_base
+buffer_context = agent:at_defensible_position / not_at_defensible_position
+buffer_context = agent:at_ideal_defensible_position #NIM / not_at_ideal_defensible_position
+
+*** Movement ***
+
+buffer_context = agent:moving #NIM / not_moving #NIM
+	# Moving includes running, rolling, shifting and walking
+buffer_context = agent:run #NIM / roll #NIM / shift #NIM / walk #NIM
+
+# The specific directions may not be required (?)
+
+buffer_context = agent:run_direction_toward_goal_location
+buffer_context = agent:run_direction_ammo
+buffer_context = agent:run_direction_base
+buffer_context = agent:move_direction_ammo
+buffer_context = agent:move_direction_away_from_explosive
+buffer_context = agent:move_direction_toward_target_enemy
+buffer_context = agent:move_direction_away_from_CQ_enemy_short_distance
+buffer_context = agent:positioning_enemy_in_close_quarter_range
+
+*** Actions ***
+
+buffer_context = agent:aim_at_target / not_aiming #NIM
+buffer_context = agent:shoot_at_target / not_firing
+buffer_context = agent:cq_engage_enemy_target / not_cq_engage_enemy_target #NIM
+buffer_context = agent:scanning / not_scanning #NIM
+buffer_context = agent:grab_ammo / not_grab_ammo #NIM
+buffer_context = agent:reloading #NIM / not_reloading #NIM
+
+*** Status ***
+
+buffer_context = agent:behind_cover / not_behind_cover
+buffer_context = agent:safe_behind_cover / not_safe_behind_cover #NIM
+buffer_context = agent:feels_aggressive / feels_defensive #NIM
+buffer_context = agent:being_mobbed / not_being_mobbed #NIM
+buffer_context = agent:caught_in_crossfire / not_caught_in_crossfire #NIM
+buffer_context = agent:health_low / health_high
+
+
+*** Ammo ***
+
+buffer_context = agent:stored_ammo_low / stored_ammo_medium / stored_ammo_high	
+		# need ammo / # could get ammo, but no need / # don't need ammo (basically full)
+buffer_context = agent:gun_ammo_low / gun_ammo_high # should reload / don't need to reload
+buffer_context = agent:ammo_located
+
+
+*** Gun ***
+
+buffer_context = agent:current_gun_rifle / current_gun_shotgun
+buffer_context = agent:current_gun_appropriate / current_gun_not_appropriate
+
+
+===== Enemy variables =====
+
+buffer_context = enemy:alive / enemy:injured / enemy:dead	
+	# The base state / # If enemy crawling around, i.e. critically injured / # Completely dead
+buffer_context = enemy:located / location_not_known
+buffer_context = enemy:target / enemy:not_target #NIM
+buffer_context = enemy:presence_known / enemy:presence_unknown #NIM
+buffer_context = enemy:vulnerable / enemy:not_vulnerable
+buffer_context = enemy:visible / enemy:not_visible 
+buffer_context = enemy:near_agent / not_near_agent #NIM
+buffer_context = enemy:distance_dangerously_close / distance_not_dangerously_close #NIM
+buffer_context = enemy:within_close_quarters_range / not_within_close_quarters_range
+buffer_context = enemy:suitable_to_kill_close_quarters / not_suitiable_to_kill_close_quarters
+	# Usually big enemies are not suitable to kill cq (for example)
+
+
